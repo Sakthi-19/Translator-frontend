@@ -53,6 +53,7 @@
         }
     </style>
 
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
@@ -91,11 +92,15 @@
             <div class="col-md-2"></div>
         </div>
 
-        <div class="col-md-2"></div>
-        <div class="col-md-8" style="text-align: center;">
-            <button id="downloadOutput" class="btn btn-primary">Download Output</button>
+        <div class="row" style="margin-top: 25px;">
+            <div class="col-md-2"></div>
+            <div class="col-md-8" style="text-align: center;">
+                <button id="downloadOutput" class="btn btn-primary">Download Output</button>
+            </div>
+            <div class="col-md-2"></div>
         </div>
-        <div class="col-md-2"></div>
+
+
     </div>
 
 
@@ -104,6 +109,25 @@
 
     <script>
         var currentText = "";
+        var recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+
+        recognition.onresult = (event) => {
+            console.log("testtt");
+            let finalTranscript = '';
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    finalTranscript += event.results[i][0].transcript;
+                }
+            }
+
+            if (finalTranscript.trim().length) { fetchData(finalTranscript) }
+
+
+            console.log(finalTranscript);
+        };
 
         document.getElementById("downloadOutput").addEventListener("click", () => {
             downloadOutput('https://node-js-nw38.onrender.com/hear?text=' + currentText)
@@ -188,24 +212,9 @@
                 }
             });
         }
-        var recognition = new webkitSpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = 'en-US';
-
-        recognition.onresult = (event) => {
-            let finalTranscript = '';
-            for (let i = event.resultIndex; i < event.results.length; ++i) {
-                if (event.results[i].isFinal) {
-                    finalTranscript += event.results[i][0].transcript;
-                }
-            }
-
-            if (finalTranscript.trim().length) { fetchData(finalTranscript) }
 
 
-            console.log(finalTranscript);
-        };
+
 
 
         (async () => {
