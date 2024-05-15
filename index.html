@@ -68,6 +68,12 @@
             text-align: center;
             padding-top: 20px;
         }
+
+        #myDiv,
+        #myDiv1 {
+            transition: all 0.5s ease;
+            /* Example transition effect */
+        }
     </style>
 
 
@@ -110,12 +116,27 @@
         </div>
 
         <div class="row" style="margin-top: 25px;">
+            <div class="col-md-6" style="text-align: center;">
+                <div id="myDiv"></div>
+            </div>
+            <div class="col-md-6" style="text-align: center;">
+                <div id="myDiv1"></div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <div class="row" style="margin-top: 25px;">
             <div class="col-md-2"></div>
             <div class="col-md-8" style="text-align: center;">
                 <button id="downloadOutput" class="btn btn-primary">Download Output</button>
             </div>
             <div class="col-md-2"></div>
         </div>
+
 
 
     </div>
@@ -139,7 +160,7 @@
                 }
             }
 
-            if (finalTranscript.trim().length) { fetchData(finalTranscript) }
+            if (finalTranscript.trim().length) { fetchData(finalTranscript); }
 
 
             console.log(finalTranscript);
@@ -203,6 +224,13 @@
         }
 
         function fetchData(text) {
+            $("#myDiv").text("English :- " + text);
+
+            // Optional: Trigger a reflow to force the transition
+            $("#myDiv").width(); // This line triggers a reflow
+
+            // Apply transition effects
+            $("#myDiv").css("color", "white");
             $.ajax({
                 url: "https://node-js-nw38.onrender.com/translate?text=" + text, // Example URL
                 method: "GET",
@@ -210,6 +238,14 @@
                     // On success, update the data container
                     speakText(data.TRANSLATED)
                     currentText = data.TRANSLATED
+
+                    $("#myDiv1").text("Tamil :- " + currentText);
+
+                    // Optional: Trigger a reflow to force the transition
+                    $("#myDiv1").width(); // This line triggers a reflow
+
+                    // Apply transition effects
+                    $("#myDiv1").css("color", "white");
                     downloadOutput('https://node-js-nw38.onrender.com/hear?text=' + currentText)
 
                 },
