@@ -132,7 +132,6 @@
         recognition.lang = 'en-US';
 
         recognition.onresult = (event) => {
-            console.log("testtt");
             let finalTranscript = '';
             for (let i = event.resultIndex; i < event.results.length; ++i) {
                 if (event.results[i].isFinal) {
@@ -201,14 +200,6 @@
             utterance.rate = 1; // slow
             utterance.lang = 'ta-IN';
             utterance.voice = window.speechSynthesis.getVoices()[index];
-            // let tamilvoiceObj = {
-            //     default: true, lang: "ta-IN", localService: false,
-            //     name: "ta-IN-Wavenet-C", voiceURI: "ta-IN-Wavenet-C"
-            // }
-            console.log("utterance", utterance);
-            console.log("speechSynthesis", speechSynthesis)
-            // speechSynthesis.speak(utterance);
-
         }
 
         function fetchData(text) {
@@ -217,7 +208,6 @@
                 method: "GET",
                 success: function (data) {
                     // On success, update the data container
-                    console.log("ssss", data)
                     speakText(data.TRANSLATED)
                     currentText = data.TRANSLATED
                     downloadOutput('https://node-js-nw38.onrender.com/hear?text=' + currentText)
@@ -255,7 +245,6 @@
 
             try {
                 window.stream = stream = await getStream();
-                console.log('Got stream');
             } catch (err) {
                 alert('Issue getting mic', err);
             }
@@ -285,7 +274,7 @@
             }
 
 
-            setUpRecording();
+            // setUpRecording();
 
             function setUpRecording() {
                 context = new AudioContext();
@@ -321,7 +310,6 @@
                     // Check 
                     if (!recording) return;
                     // Do something with the data, i.e Convert this to WAV
-                    console.log('recording');
                     let left = e.inputBuffer.getChannelData(0);
                     let right = e.inputBuffer.getChannelData(1);
                     if (!tested) {
@@ -393,7 +381,6 @@
             }
 
             function stop() {
-                console.log('Stop')
                 recognition.stop()
                 recording = false;
                 document.querySelector('#msg').style.visibility = 'hidden'
@@ -442,19 +429,11 @@
 
                 // our final binary blob
                 const blob = new Blob([view], { type: 'audio/wav' });
-
                 const audioUrl = URL.createObjectURL(blob);
-                console.log('BLOB ', blob);
-                console.log('URL ', audioUrl);
                 document.querySelector('#audio').setAttribute('src', audioUrl);
-                //const link = document.querySelector('#download');
-                //link.setAttribute('href', audioUrl);
-                //link.download = 'output.wav';
+
             }
 
-            // Visualizer function from
-            // https://webaudiodemos.appspot.com/AudioRecorder/index.html
-            //
             function visualize() {
                 WIDTH = canvas.width;
                 HEIGHT = canvas.height;
@@ -462,17 +441,13 @@
                 CENTERY = canvas.height / 2;
 
                 let visualSetting = visualSelect.value;
-                console.log(visualSetting);
                 if (!analyser) return;
 
                 if (visualSetting === "sinewave") {
                     analyser.fftSize = 2048;
                     var bufferLength = analyser.fftSize;
-                    console.log(bufferLength);
                     var dataArray = new Uint8Array(bufferLength);
-
                     canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-
                     var draw = function () {
 
                         drawVisual = requestAnimationFrame(draw);
@@ -513,9 +488,7 @@
                 } else if (visualSetting == "frequencybars") {
                     analyser.fftSize = 64;
                     var bufferLengthAlt = analyser.frequencyBinCount;
-                    console.log(bufferLengthAlt);
                     var dataArrayAlt = new Uint8Array(bufferLengthAlt);
-
                     canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
                     var drawAlt = function () {
@@ -561,7 +534,6 @@
                         let radius = dataArray[2] / 2
                         if (radius < 20) radius = 20;
                         if (radius > 100) radius = 100;
-                        // console.log('Radius ', radius)
                         canvasCtx.beginPath();
                         canvasCtx.arc(CENTERX, CENTERY, radius, 0, 2 * Math.PI, false);
                         // canvasCtx.fillStyle = 'rgb(50,50,' + (radius+100) +')';
@@ -581,7 +553,6 @@
             };
 
             micSelect.onchange = async e => {
-                console.log('now use device ', micSelect.value);
                 stream.getTracks().forEach(function (track) {
                     track.stop();
                 });
@@ -606,7 +577,6 @@
             }
 
             document.querySelector('#record').onclick = (e) => {
-                console.log('Start recording')
                 start();
             }
 
